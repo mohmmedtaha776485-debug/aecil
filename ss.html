@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بوابة الطالب الجامعية - جامعة جبلة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* الإعدادات الأساسية */
+        :root {
+            --green-main: #3c7d42; /* تم توحيد اللون الأخضر ليطابق الجامعة */
+            --blue-nav: #3f51b5;
+            --bg-light: #f4f6f9;
+            --text-dark: #333;
+            --border-color: #ddd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: #ffffff; color: var(--text-dark); overflow-x: hidden; }
+
+        /* التحكم بالشاشات */
+        .view-section { display: none; min-height: 100vh; background-color: #ffffff; padding-bottom: 30px; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ----------------- 1. شاشة تسجيل الدخول ----------------- */
+        .login-header { text-align: center; font-size: 1.8rem; font-weight: bold; padding: 20px; border-bottom: 3px solid var(--green-main); }
+        .login-wrapper { max-width: 400px; margin: 20px auto; padding: 0 15px; }
+        .btn-green-top { background-color: var(--green-main); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; cursor: pointer; }
+        .login-box { background-color: #1a1a1a; color: white; padding: 30px 20px; border-radius: 12px; text-align: center; }
+        .login-box label { display: block; margin-bottom: 10px; font-size: 1.1rem; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 25px; border-radius: 5px; border: 1px solid #444; font-size: 1rem; text-align: left; direction: ltr; }
+        .login-box .btn-submit { background-color: var(--green-main); color: white; border: none; width: 100%; padding: 12px; border-radius: 5px; font-size: 1.2rem; cursor: pointer; margin-bottom: 10px; }
+        .login-box a { color: #17a2b8; text-decoration: none; font-size: 0.9rem; }
+        .copyright { text-align: center; font-size: 0.8rem; color: #777; margin-top: 20px; line-height: 1.5; }
+
+        /* ----------------- الهيدر الموحد للشاشات ----------------- */
+        .app-header { display: flex; align-items: center; padding: 15px; background-color: #f8f9fa; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 10; }
+        .menu-icon { font-size: 1.8rem; cursor: pointer; color: var(--green-main); padding-left: 15px; }
+        .header-title { font-weight: bold; font-size: 1.1rem; flex-grow: 1; text-align: center; color: var(--green-main); }
+        .back-icon { font-size: 1.5rem; cursor: pointer; color: var(--text-dark); padding-right: 15px; font-weight: bold; }
+
+        /* ----------------- القائمة الجانبية (Sidebar) ----------------- */
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99; }
+        .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background-color: var(--blue-nav); color: white; z-index: 100; transition: 0.3s ease; overflow-y: auto; }
+        .sidebar.open { right: 0; }
+        .sidebar-header { padding: 20px; background-color: rgba(0,0,0,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+        .sidebar-header img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid white; }
+        .sidebar-menu { list-style: none; padding: 0; }
+        .sidebar-menu li { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-menu a { display: block; padding: 15px 20px; color: white; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+
+        /* ----------------- 2. شاشة البروفايل ----------------- */
+        .profile-header-title { font-size: 1.5rem; text-align: center; margin: 20px 0; font-weight: bold; color: #444; }
+        
+        .avatar-container { text-align: center; margin-bottom: 15px; }
+        /* ====== التعديل هنا: الدائرة الخضراء تماماً مثل صورتك ====== */
+        .avatar-container img { 
+            width: 140px; 
+            height: 140px; 
+            border-radius: 50%; /* دائري تماماً */
+            border: 2px solid #3c7d42; /* الإطار الأخضر مثل الفريم */
+            object-fit: cover; 
+            background-color: #f8f9fa;
+            color: #3c7d42; /* لون النص لو الصورة ما طلعت */
+            display: inline-block;
+            line-height: 140px; /* لتوسيط النص البديل */
+        }
+        
+        .student-name { text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #222; padding: 0 15px;}
+        .student-degree { text-align: center; color: var(--green-main); font-size: 1rem; font-weight: bold; margin-bottom: 10px; }
+        
+        .en-name-box { border: 1px solid #ccc; padding: 10px; width: 80%; margin: 0 auto 15px; border-radius: 5px; text-align: center; color: #777; background-color: #fafafa; font-size: 0.95rem; }
+        
+        .edit-btn { display: block; width: 80%; margin: 0 auto 20px; background-color: #17a2b8; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        
+        .basic-info-table { width: 90%; margin: 0 auto 20px; border-collapse: collapse; }
+        .basic-info-table td { padding: 12px; border-bottom: 1px solid var(--border-color); text-align: right; font-size: 0.95rem; }
+        .basic-info-table td:first-child { font-weight: bold; color: #555; width: 40%; }
+        
+        .quick-actions { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .quick-actions button { border: 1px solid #17a2b8; background: white; color: #17a2b8; padding: 8px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .quick-actions button.active { background: #17a2b8; color: white; }
+
+        /* التبويبات المتراصة كما في الفيديو */
+        .tabs-container { width: 90%; margin: 0 auto; }
+        .tab-button { display: block; width: 100%; padding: 15px; background-color: #f8f9fa; border: 1px solid var(--border-color); margin-bottom: -1px; font-weight: bold; text-align: center; cursor: pointer; font-size: 1rem; color: #0056b3; }
+        .tab-button:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+        .tab-button:last-of-type { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+        .tab-content { display: none; background: white; border: 1px solid var(--border-color); border-radius: 5px; padding: 15px; margin-top: 10px; margin-bottom: 15px; }
+        .tab-content.active { display: block; }
+        .data-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.95rem;}
+        .data-row:last-child { border-bottom: none; }
+        .data-label { font-weight: bold; color: #333; }
+
+        /* ----------------- 3. شاشة الخدمات الأكاديمية ----------------- */
+        .service-title-text { text-align: center; margin: 20px; font-size: 1.1rem; font-weight: bold; color: var(--text-dark); line-height: 1.6; }
+        .document-card { border: 1px solid var(--blue-nav); border-radius: 12px; padding: 30px; text-align: center; margin: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .document-card img { width: 120px; margin-bottom: 15px; }
+        .document-card h2 { color: var(--blue-nav); font-size: 1.3rem; margin-top: 10px; }
+        .warning-text { color: red; text-align: center; font-weight: bold; margin: 30px 20px; font-size: 0.9rem; line-height: 1.6; }
+
+        /* ----------------- 4. شاشة المستويات ----------------- */
+        .back-btn-green { display: block; width: 90%; margin: 20px auto; background-color: var(--green-main); color: white; text-align: center; padding: 12px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; }
+        .level-card { border: 1px solid var(--border-color); border-radius: 15px; margin: 0 20px 20px; padding: 0 0 15px 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; }
+        
+        /* هنا سر القص المقوس للصورة كما ظهرت في الفيديو */
+        .level-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 150px 150px 0 0; margin-bottom: 15px; border-bottom: 1px solid #eee; background-color:#eee;}
+        
+        .level-card h3 { color: #333; margin-bottom: 10px; }
+        .level-details { text-align: center; line-height: 1.8; color: #555; margin-bottom: 15px; font-size: 0.95rem; }
+        .btn-details { background-color: var(--green-main); color: white; border: none; padding: 8px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .alert-danger { background-color: #dc3545; color: white; padding: 10px; border-radius: 5px; font-weight: bold; width: 90%; margin: 0 auto; }
+
+        /* ----------------- 5. شاشة جدول الدرجات ----------------- */
+        .checkbox-wrap { margin: 15px 20px; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 0.95rem; }
+        .table-responsive { overflow-x: auto; margin: 0 20px; }
+        .grades-table { width: 100%; min-width: 800px; border-collapse: collapse; text-align: center; font-size: 0.9rem; }
+        .grades-table th, .grades-table td { border: 1px solid var(--border-color); padding: 12px 8px; }
+        .grades-table th { background-color: #f8f9fa; color: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+            <img src="oo.jpg" alt="محمد">
+
+            <div>
+                <div style="font-size: 0.9rem; font-weight: bold;">صلاح عبدالرزاق السابر</div>
+                <div style="font-size: 0.8rem; color: #ccc;">الرقم الأكاديمي: 24710022</div>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="toggleSidebar(); navigateTo('view-services')">🏫 الخدمات الأكاديمية</a></li>
+            <li><a href="#">💰 الخدمات المالية</a></li>
+            <li><a href="#">📋 إستعلامات مالية</a></li>
+            <li><a href="#">📄 إصدار حوافظ</a></li>
+            <li><a href="#">📁 إدارة الوثائق</a></li>
+            <li><a href="#">🔑 تغيير كلمة السر</a></li>
+            <li><a href="#" onclick="toggleSidebar(); navigateTo('view-login')">🚪 تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <div id="view-login" class="view-section active">
+        <div class="login-header">بوابة الطالب الجامعية</div>
+        <div class="login-wrapper">
+            <button class="btn-green-top">مستمر</button>
+            <div class="login-box">
+                <label>ادخل البريد الالكتروني</label>
+                <input type="email" value="24710022@jums.edu.ye">
+                
+                <label>أدخل كلمة السر</label>
+                <input type="password" value="........">
+                
+                <button class="btn-submit" onclick="navigateTo('view-profile')">دخول</button>
+                <a href="#">تحديث الصفحة</a>
+            </div>
+            <div class="copyright">
+                جميع الحقوق محفوظة لمركز تقنية المعلومات في<br>التعليم العالي © 2020<br><strong>YCIT-HE</strong>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-profile" class="view-section">
+        <div class="app-header">
+            <div class="menu-icon" onclick="toggleSidebar()">≡</div>
+            <div class="header-title">جامعة جبلة للعلوم الطبية والصحية</div>
+        </div>
+        
+        <h1 class="profile-header-title">بروفايل الطالب</h1>
+        
+        <div class="avatar-container">
+            <img src="1000229088.png" alt="صورة الطالب">
+        </div>
+        
+        <div class="student-name">صلاح عبدالرزاق عبدالرحمن محمد السابر</div>
+        <div class="student-degree">بكالوريوس</div>
+        
+        <div class="en-name-box">الاسم الانجليزي Salah Alsaber</div>
+        
+        <button class="edit-btn">تعديل ✎</button>
+
+        <table class="basic-info-table">
+            <tr><td>الرقم الأكاديمي</td><td>24710022</td></tr>
+            <tr><td>الكلية</td><td>كلية الطب</td></tr>
+            <tr><td>التخصص</td><td>طب تخدير وعناية مركزة</td></tr>
+            <tr><td>المعدل العام</td><td></td></tr>
+            <tr><td>المجموع الكلي</td><td></td></tr>
+            <tr><td>الترتيب</td><td></td></tr>
+        </table>
+
+        <div class="quick-actions">
+            <button>خدمات مالية</button>
+            <button class="active" onclick="navigateTo('view-services')">خدمات أكاديمية</button>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab-button" onclick="toggleTab('tab-personal')">البيانات الشخصية</div>
+            <div class="tab-content" id="tab-personal">
+                <div class="data-row"><span class="data-label">رقم الهاتف</span> <span>776962651</span></div>
+                <div class="data-row"><span class="data-label">البريد الالكتروني</span> <span>24710022@jums.edu.ye</span></div>
+                <div class="data-row"><span class="data-label">نوع الهوية</span> <span>بطاقة شخصية</span></div>
+                <div class="data-row"><span class="data-label">تاريخ الميلاد</span> <span>2004-05-07</span></div>
+                <div class="data-row"><span class="data-label">محل الميلاد</span> <span>جبلة / إب</span></div>
+            </div>
+
+            <div class="tab-button" onclick="toggleTab('tab-university')">البيانات الجامعية</div>
+            <div class="tab-content" id="tab-university">
+                <div class="data-row"><span class="data-label">الكلية</span> <span>كلية الطب</span></div>
+                <div class="data-row"><span class="data-label">التخصص</span> <span>طب تخدير وعناية مركزة</span></div>
+                <div class="data-row"><span class="data-label">المستوى</span> <span>المستوى الثاني</span></div>
+                <div class="data-row"><span class="data-label">الحالة الأكاديمية</span> <span>مستمر</span></div>
+                <div class="data-row"><span class="data-label">عام الانضمام</span> <span>2025/2024</span></div>
+                <div class="data-row"><span class="data-label">النظام الدراسي</span> <span>النظام الموازي</span></div>
+            </div>
+
+            <div class="tab-button" onclick="toggleTab('tab-admission')">بيانات استمارة القبول</div>
+            <div class="tab-content" id="tab-admission">
+                <div class="data-row"><span class="data-label">السكن</span> <span>لايوجد</span></div>
+                <div class="data-row"><span class="data-label">إسم ولي الأمر</span> <span>لايوجد</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-services" class="view-section">
+        <div class="app-header">
+            <div class="back-icon" onclick="navigateTo('view-profile')">➔</div>
+            <div class="header-title">جامعة جبلة للعلوم الطبية والصحية</div>
+        </div>
+        
+        <div class="service-title-text">
+            جامعة جبلة للعلوم الطبية والصحية-<br>كلية الطب - طب تخدير وعناية مركزة<br>الخدمات الأكاديمية
+        </div>
+
+        <div class="document-card" onclick="navigateTo('view-levels')">
+            <img src="1000229105.png" alt="أيقونة الدرجات">
+            <h2>بيان درجات الطالب</h2>
+        </div>
+
+        <div class="warning-text">
+            ملاحظة هامة : البيانات المالية والأكاديمية قيد المراجعة<br>
+            <span style="font-size: 0.8rem; color: #777; font-weight: normal;">جميع الحقوق محفوظة لمركز تقنية المعلومات في التعليم العالي © 2026</span>
+        </div>
+    </div>
+
+    <div id="view-levels" class="view-section">
+        <div class="app-header">
+            <div class="back-icon" onclick="navigateTo('view-services')">➔</div>
+            <div class="header-title">بيان درجات الطلاب</div>
+        </div>
+        
+        <button class="back-btn-green" onclick="navigateTo('view-services')">رجوع للخلف</button>
+
+        <div class="level-card">
+            <img src="1000229140.jpg" alt="صورة القاعة">
+            <h3>المستوى الاول</h3>
+            <div class="level-details">
+                عدد مواد المستوى 13<br>
+                معدل الطالب في المستوى : (68.72)<br>
+                مجموع الطالب في المستوى : (1477.5)<br>
+                عدد مواد الرسوب 0
+            </div>
+            <button class="btn-details" onclick="navigateTo('view-grades')">التفاصيل</button>
+        </div>
+
+        <div class="level-card" style="padding-top: 15px;">
+            <h3>المستوى الثاني</h3>
+            <div class="alert-danger">الدرجات محجوبة يرجى مراجعة الكلية</div>
+        </div>
+    </div>
+
+    <div id="view-grades" class="view-section">
+        <div class="app-header">
+            <div class="back-icon" onclick="navigateTo('view-levels')">➔</div>
+            <div class="header-title">بيان درجات الطلاب - للمستوى الاول</div>
+        </div>
+        
+        <button class="back-btn-green" onclick="navigateTo('view-levels')">رجوع للخلف</button>
+
+        <label class="checkbox-wrap">
+            <input type="checkbox"> تفعيل الاوزان
+        </label>
+
+        <div class="table-responsive">
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>م</th>
+                        <th>المادة</th>
+                        <th>الفصل</th>
+                        <th>العام الجامعي</th>
+                        <th>الدرجة العظمى</th>
+                        <th>درجة النجاح</th>
+                        <th>درجة الطالب</th>
+                        <th>نوع المادة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>لغة عربية (1)</td><td>الاول</td><td>2025/2024</td><td>100.00</td><td>65.00</td><td>65.00</td><td>متطلب</td></tr>
+                    <tr><td>2</td><td>ثقافة إسلامية</td><td>الاول</td><td>2025/2024</td><td>100.00</td><td>65.00</td><td>86.00</td><td>متطلب</td></tr>
+                    <tr><td>3</td><td>مقدمة حاسوب</td><td>الاول</td><td>2025/2024</td><td>100.00</td><td>65.00</td><td>91.00</td><td>متطلب</td></tr>
+                    <tr><td>4</td><td>لغة انجليزية (1)</td><td>الاول</td><td>2026/2025</td><td>100.00</td><td>65.00</td><td>65.00</td><td>متطلب</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view-section').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('appSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.style.display = 'none';
+            } else {
+                sidebar.classList.add('open');
+                overlay.style.display = 'block';
+            }
+        }
+
+        function toggleTab(tabId) {
+            const content = document.getElementById(tabId);
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+            } else {
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                content.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

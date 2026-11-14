@@ -1,0 +1,125 @@
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f3f6fa;color:#263238}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.login{
+ min-height:100vh;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(135deg,#172554,#1e3a5f,#0f172a);padding:20px
+}
+.login-box{
+ width:100%;max-width:420px;background:white;border-radius:22px;
+ box-shadow:0 20px 60px #0008;overflow:hidden
+}
+.login-head{padding:35px;text-align:center;color:white;background:linear-gradient(135deg,#2563eb,#172554)}
+.login-head .icon{font-size:55px}
+.login-head h1{margin:10px 0 0;font-size:25px}
+.login-body{padding:30px}
+.app{display:none}
+.topbar{
+ background:linear-gradient(135deg,#172554,#1e3a5f);color:#fff;
+ padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
+ position:sticky;top:0;z-index:20;box-shadow:0 4px 15px #0003
+}
+.logo{font-size:22px;font-weight:bold}
+.menu{display:flex;gap:6px;flex-wrap:wrap}
+.menu button{
+ border:0;background:transparent;color:#fff;padding:10px 12px;border-radius:8px
+}
+.menu button:hover,.menu button.active{background:#ffffff25}
+.container{max-width:1400px;margin:auto;padding:25px}
+h2{margin-top:0}
+.card{
+ background:white;border-radius:16px;padding:20px;margin-bottom:20px;
+ box-shadow:0 5px 18px #00000012
+}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.stat{color:white;padding:25px;border-radius:18px;text-align:center;box-shadow:0 8px 20px #0002}
+.stat .num{font-size:35px;font-weight:bold;margin:10px}
+.blue{background:#2563eb}.green{background:#16a34a}.red{background:#dc2626}.orange{background:#ea8a00}
+.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.field label{display:block;margin-bottom:6px;font-weight:bold}
+input,select,textarea{
+ width:100%;padding:11px;border:1px solid #d5dce5;border-radius:9px;
+ outline:none;background:#fff
+}
+input:focus,select:focus,textarea:focus{border-color:#2563eb}
+textarea{min-height:80px;resize:vertical}
+.btn{
+ border:0;border-radius:8px;padding:10px 15px;font-weight:bold;color:#fff
+}
+.primary{background:#2563eb}.success{background:#16a34a}.danger{background:#dc2626}
+.warning{background:#ea8a00}.info{background:#0891b2}.gray{background:#64748b}
+.btn:hover{filter:brightness(.92)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:11px;border-bottom:1px solid #e5e7eb;text-align:right}
+th{background:#172554;color:white}
+tr:hover td{background:#f8fafc}
+.actions{white-space:nowrap}
+.actions button{margin:2px}
+.search{max-width:350px;margin-bottom:15px}
+.alert{padding:12px;border-radius:9px;margin-bottom:15px}
+.alert.error{background:#fee2e2;color:#991b1b}
+.alert.ok{background:#dcfce7;color:#166534}
+.hidden{display:none!important}
+.empty{text-align:center;padding:30px;color:#777}
+.modal{
+ position:fixed;inset:0;background:#0008;display:none;align-items:center;
+ justify-content:center;padding:20px;z-index:100
+}
+.modal.show{display:flex}
+.modal-box{
+ background:white;width:100%;max-width:600px;border-radius:18px;padding:25px;
+ max-height:90vh;overflow:auto
+}
+.modal-title{display:flex;justify-content:space-between;align-items:center}
+.close{background:#dc2626;color:white;border:0;border-radius:7px;padding:7px 12px}
+.footer{text-align:center;color:#777;padding:20px}
+@media(max-width:1000px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .form-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+ .topbar{display:block}
+ .logo{margin-bottom:10px}
+ .menu{display:grid;grid-template-columns:repeat(2,1fr)}
+ .menu button{width:100%}
+ .container{padding:15px}
+ .grid,.form-grid{grid-template-columns:1fr}
+ .stat{padding:18px}
+}
+</style>
+</head>
+<body>
+    <center>
+  
+<h>مرحبا بكم في بوابه الطلاب</h>
+<h4>يرجى تسحيل الدخول للوصول الى حسابك</h4>
+
+    </center>
+              
+<!-- تسجيل الدخول -->
+<div id="loginPage" class="login">
+ <div class="login-box">
+  <div class="login-head">
+   <div class="icon"></div>
+   <h1></h1>
+  </div>
+  <div class="login-body">
+   <div id="loginMsg"></div>
+   <div class="field">
+    <label>اسم المستخدم</label>
+    <input id="username" value="admin">
+   </div>
+   <br>
+   <div class="field">
+    <label>كلمة المرور</label>
+    <input id="password" type="password" value="admin123">
+   </div>
+   <br>
+   <button class="btn primary" style="width:100%" onclick="login()">دخول</button>
+   <p style="text-align:center;color:#777;font-size:13px"></p>
+  </div>
+ </div>
+</div>
